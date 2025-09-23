@@ -58,6 +58,6 @@ var Service = fx.Module("service",
 
 var Handler = fx.Module("handler",
 	fx.Provide(
-		handler.NewCreateUserHandler,
+		handler.NewCreateCourseHandler,
 	),
 )
