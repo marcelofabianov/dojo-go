@@ -25,10 +25,10 @@ type FromCourseInput struct {
 }
 
 type Course struct {
-	ID          string
-	Title       string
-	Description string
-	CreatedAt   time.Time
+	ID          string    `db:"id"`
+	Title       string    `db:"title"`
+	Description string    `db:"description"`
+	CreatedAt   time.Time `db:"created_at"`
 }
 
 func NewCourse(input NewCourseInput) (*Course, error) {
