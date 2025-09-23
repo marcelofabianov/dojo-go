@@ -3,6 +3,8 @@ package model
 import (
 	"errors"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 var (
@@ -38,9 +40,18 @@ func NewCourse(input NewCourseInput) (*Course, error) {
 		return nil, ErrEmptyDescription
 	}
 
+	id, err := uuid.NewV7()
+	if err != nil {
+		return nil, err
+	}
+
+	created := time.Now()
+
 	return &Course{
+		ID:          id.String(),
 		Title:       input.Title,
 		Description: input.Description,
+		CreatedAt:   created,
 	}, nil
 }
 
