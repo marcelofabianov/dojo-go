@@ -7,5 +7,5 @@ import (
 )
 
 type CourseRepositoryPort interface {
-	CreateCourse(ctx context.Context, course model.Course) error
+	CreateCourse(ctx context.Context, course *model.Course) error
 }

@@ -17,7 +17,7 @@ func NewPostgresCourseRepository(db *sqlx.DB) port.CourseRepositoryPort {
 	return &PostgresCourseRepository{db: db}
 }
 
-func (r *PostgresCourseRepository) CreateCourse(ctx context.Context, course model.Course) error {
+func (r *PostgresCourseRepository) CreateCourse(ctx context.Context, course *model.Course) error {
 
 	return nil
 }
