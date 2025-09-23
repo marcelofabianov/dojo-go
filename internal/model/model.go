@@ -1,6 +1,14 @@
 package model
 
-import "time"
+import (
+	"errors"
+	"time"
+)
+
+var (
+	ErrEmptyTitle       = errors.New("title cannot be empty")
+	ErrEmptyDescription = errors.New("description cannot be empty")
+)
 
 type NewCourseInput struct {
 	Title       string
@@ -21,11 +29,19 @@ type Course struct {
 	CreatedAt   time.Time
 }
 
-func NewCourse(input NewCourseInput) *Course {
+func NewCourse(input NewCourseInput) (*Course, error) {
+	if input.Title == "" {
+		return nil, ErrEmptyTitle
+	}
+
+	if input.Description == "" {
+		return nil, ErrEmptyDescription
+	}
+
 	return &Course{
 		Title:       input.Title,
 		Description: input.Description,
-	}
+	}, nil
 }
 
 func FromCourse(input FromCourseInput) *Course {
