@@ -12,24 +12,24 @@ type CreateCourseRequest struct{}
 
 type CreateCourseResponse struct{}
 
-type CreateUserHandler struct {
+type CreateCourseHandler struct {
 	logger        *slog.Logger
 	validator     *validator.Validator
 	courseService *port.CourseServicePort
 }
 
-func NewCreateUserHandler(
+func NewCreateCourseHandler(
 	logger *slog.Logger,
 	validator *validator.Validator,
 	courseService *port.CourseServicePort,
-) *CreateUserHandler {
-	return &CreateUserHandler{
+) *CreateCourseHandler {
+	return &CreateCourseHandler{
 		logger:        logger,
 		validator:     validator,
 		courseService: courseService,
 	}
 }
 
-func (h *CreateUserHandler) Handle(w http.ResponseWriter, r *http.Request) {
+func (h *CreateCourseHandler) Handle(w http.ResponseWriter, r *http.Request) {
 	//...
 }

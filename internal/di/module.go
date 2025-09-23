@@ -1,7 +1,6 @@
 package di
 
 import (
-	"github.com/go-chi/chi/v5"
 	"go.uber.org/fx"
 
 	"github.com/marcelofabianov/dojo-go/config"
@@ -19,7 +18,6 @@ import (
 var Config = fx.Module("config",
 	fx.Provide(
 		config.NewConfig,
-
 		func(cfg *config.Config) *config.GeneralConfig { return &cfg.General },
 		func(cfg *config.Config) *config.LoggerConfig { return &cfg.Logger },
 		func(cfg *config.Config) *config.ServerConfig { return &cfg.Server },
@@ -38,11 +36,6 @@ var Pkg = fx.Module("pkg",
 		web.NewRouter,
 		web.NewServer,
 	),
-
-	fx.Invoke(func(r *chi.Mux) {
-		r.Get("/", web.IndexHandler)
-		r.Get("/healthz", web.HealthCheckHandler)
-	}),
 )
 
 // --- Repository ---
