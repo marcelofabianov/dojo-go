@@ -11,7 +11,7 @@ type CourseService struct {
 	repo port.CourseRepositoryPort
 }
 
-func NewCourseService(repo port.CourseRepositoryPort) *CourseService {
+func NewCourseService(repo port.CourseRepositoryPort) port.CourseServicePort {
 	return &CourseService{repo: repo}
 }
 

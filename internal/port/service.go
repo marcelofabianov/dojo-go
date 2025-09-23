@@ -7,5 +7,5 @@ import (
 )
 
 type CourseServicePort interface {
-	CreateCourse(ctx context.Context, input model.NewCourseInput) error
+	CreateCourse(ctx context.Context, input model.NewCourseInput) (*model.Course, error)
 }
