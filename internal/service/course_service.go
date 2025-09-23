@@ -15,8 +15,16 @@ func NewCourseService(repo port.CourseRepositoryPort) port.CourseServicePort {
 	return &CourseService{repo: repo}
 }
 
-func (*CourseService) CreateCourse(ctx context.Context, input model.NewCourseInput) (*model.Course, error) {
-	//...
+func (c *CourseService) CreateCourse(ctx context.Context, input model.NewCourseInput) (*model.Course, error) {
+	newCourse, err := model.NewCourse(input)
+	if err != nil {
+		return nil, err
+	}
 
-	return nil, nil
+	err = c.repo.CreateCourse(ctx, newCourse)
+	if err != nil {
+		return nil, err
+	}
+
+	return newCourse, nil
 }
