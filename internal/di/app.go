@@ -8,13 +8,13 @@ import (
 
 func New() *fx.App {
 	return fx.New(
-		// --- Config ---
+		Config,
+		Pkg,
+		Repository,
+		Service,
+		Handler,
 
-		// --- PKG ---
-
-		// --- Repositories ---
-
-		// --- Services ---
+		//----
 
 		fx.Invoke(func(*http.Server) {}),
 	)
