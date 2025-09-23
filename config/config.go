@@ -11,11 +11,10 @@ import (
 )
 
 type Config struct {
-	General  GeneralConfig  `mapstructure:"general"`
-	Logger   LoggerConfig   `mapstructure:"logger"`
-	Server   ServerConfig   `mapstructure:"server"`
-	DB       DBConfig       `mapstructure:"db"`
-	Password PasswordConfig `mapstructure:"password"`
+	General GeneralConfig `mapstructure:"general"`
+	Logger  LoggerConfig  `mapstructure:"logger"`
+	Server  ServerConfig  `mapstructure:"server"`
+	DB      DBConfig      `mapstructure:"db"`
 }
 
 type GeneralConfig struct {
@@ -66,14 +65,6 @@ type DBConfig struct {
 	ExecTimeout     time.Duration `mapstructure:"exectimeout"`
 }
 
-type PasswordConfig struct {
-	MinLength     int  `mapstructure:"min_length"`
-	RequireNumber bool `mapstructure:"require_number"`
-	RequireUpper  bool `mapstructure:"require_upper"`
-	RequireLower  bool `mapstructure:"require_lower"`
-	RequireSymbol bool `mapstructure:"require_symbol"`
-}
-
 func NewConfig() (*Config, error) {
 	if err := godotenv.Load(); err != nil {
 		if !os.IsNotExist(err) {
@@ -111,11 +102,6 @@ func NewConfig() (*Config, error) {
 	v.SetDefault("db.connmaxidletime", "10m")
 	v.SetDefault("db.querytimeout", "5s")
 	v.SetDefault("db.exectimeout", "3s")
-	v.SetDefault("password.min_length", 12)
-	v.SetDefault("password.require_number", true)
-	v.SetDefault("password.require_upper", true)
-	v.SetDefault("password.require_lower", true)
-	v.SetDefault("password.require_symbol", false)
 
 	v.SetConfigName(".env")
 	v.SetConfigType("env")

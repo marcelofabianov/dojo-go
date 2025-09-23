@@ -1,0 +1,52 @@
+name: "dojo"
+
+services:
+  dojo-api:
+    container_name: dojo-api
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        HOST_UID: ${HOST_UID:-1000}
+        HOST_GID: ${HOST_GID:-1000}
+    env_file:
+      - .env
+    ports:
+      - "8080:${APP_API_PORT:-8080}"
+    networks:
+      - dojo-network
+    working_dir: /app
+    volumes:
+      - .:/app
+    depends_on:
+      dojo-db:
+        condition: service_healthy
+
+  dojo-db:
+    container_name: dojo-db
+    restart: always
+    image: "postgres:17-alpine"
+    ports:
+      - "5454:${APP_DB_PORT:-5432}"
+    environment:
+      POSTGRES_USER: ${APP_DB_USER:-username}
+      POSTGRES_PASSWORD: ${APP_DB_PASSWORD:-password}
+      POSTGRES_DB: ${APP_DB_NAME:-dojo-db}
+    volumes:
+      - dojo-data:/var/lib/postgresql/data:rw
+    networks:
+      - dojo-network
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  dojo-data:
+    driver: local
+
+networks:
+  dojo-network:
+    driver: bridge

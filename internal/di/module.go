@@ -22,7 +22,6 @@ var Config = fx.Module("config",
 		func(cfg *config.Config) *config.LoggerConfig { return &cfg.Logger },
 		func(cfg *config.Config) *config.ServerConfig { return &cfg.Server },
 		func(cfg *config.Config) *config.DBConfig { return &cfg.DB },
-		func(cfg *config.Config) *config.PasswordConfig { return &cfg.Password },
 	),
 )
 
