@@ -57,3 +57,29 @@ func (r *PostgresCourseRepository) GetCourseByID(ctx context.Context, id string)
 
 	return &course, nil
 }
+
+func (r *PostgresCourseRepository) DeleteCourseByID(ctx context.Context, id string) error {
+	query := `DELETE FROM courses WHERE id = $1`
+
+	result, err := r.db.ExecContext(ctx, query, id)
+	if err != nil {
+		return fault.Wrap(err,
+			"failed to delete course by id from database",
+			fault.WithCode(fault.Internal),
+		)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fault.Wrap(err,
+			"failed to get rows affected after delete",
+			fault.WithCode(fault.Internal),
+		)
+	}
+
+	if rowsAffected == 0 {
+		return model.ErrCourseNotFound
+	}
+
+	return nil
+}

@@ -32,3 +32,7 @@ func (c *CourseService) CreateCourse(ctx context.Context, input model.NewCourseI
 func (c *CourseService) GetCourseByID(ctx context.Context, id string) (*model.Course, error) {
 	return c.repo.GetCourseByID(ctx, id)
 }
+
+func (c *CourseService) DeleteCourseByID(ctx context.Context, id string) error {
+	return c.repo.DeleteCourseByID(ctx, id)
+}

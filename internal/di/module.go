@@ -59,6 +59,7 @@ var Handler = fx.Module("handler",
 	fx.Provide(
 		handler.NewCreateCourseHandler,
 		handler.NewGetCourseHandler,
+		handler.NewDeleteCourseHandler,
 	),
 
 	fx.Invoke(handler.RegisterRoutes),
