@@ -45,6 +45,13 @@ Siga os passos abaixo para configurar e executar o ambiente de desenvolvimento l
     docker compose up -d
     ```
 
+5. **Gerando doc do swagger**
+    Gere os documentos do swagger para a API. E acesse pelo link: `http://localhost:8080/swagger/index.html`
+
+    ```bash
+    docker compose exec dojo-api swag init -g cmd/api/main.go
+    ```
+
 5.  **Execute as migrations do banco de dados**
     Para criar as tabelas necessárias, execute o `goose` dentro do contêiner da aplicação.
     ```bash
@@ -130,6 +137,7 @@ go test -count=1 -tags="e2e" ./test/e2e/...
 * **Migrations:** [Goose](https://github.com/pressly/goose)
 * **Configuração:** [Viper](https://github.com/spf13/viper) & [Godotenv](https://github.com/joho/godotenv)
 * **Validação:** [go-playground/validator](https://github.com/go-playground/validator)
+* **Documentação:** [Swagger](https://github.com/swaggo/swag)
 
 ---
 
