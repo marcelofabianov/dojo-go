@@ -25,6 +25,11 @@ type FromCourseInput struct {
 	CreatedAt   time.Time
 }
 
+type UpdateCourseInput struct {
+	Title       string
+	Description string
+}
+
 type Course struct {
 	ID          string    `db:"id"`
 	Title       string    `db:"title"`
@@ -63,4 +68,18 @@ func FromCourse(input FromCourseInput) *Course {
 		Description: input.Description,
 		CreatedAt:   input.CreatedAt,
 	}
+}
+
+func (c *Course) Update(input UpdateCourseInput) error {
+	if input.Title == "" {
+		return ErrEmptyTitle
+	}
+	if input.Description == "" {
+		return ErrEmptyDescription
+	}
+
+	c.Title = input.Title
+	c.Description = input.Description
+
+	return nil
 }

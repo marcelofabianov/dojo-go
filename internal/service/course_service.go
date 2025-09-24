@@ -3,6 +3,8 @@ package service
 import (
 	"context"
 
+	"github.com/marcelofabianov/fault"
+
 	"github.com/marcelofabianov/dojo-go/internal/model"
 	"github.com/marcelofabianov/dojo-go/internal/port"
 )
@@ -35,4 +37,21 @@ func (c *CourseService) GetCourseByID(ctx context.Context, id string) (*model.Co
 
 func (c *CourseService) DeleteCourseByID(ctx context.Context, id string) error {
 	return c.repo.DeleteCourseByID(ctx, id)
+}
+
+func (c *CourseService) UpdateCourse(ctx context.Context, id string, input model.UpdateCourseInput) (*model.Course, error) {
+	course, err := c.repo.GetCourseByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := course.Update(input); err != nil {
+		return nil, fault.Wrap(err, "update validation failed", fault.WithCode(fault.Invalid))
+	}
+
+	if err := c.repo.UpdateCourse(ctx, course); err != nil {
+		return nil, err
+	}
+
+	return course, nil
 }

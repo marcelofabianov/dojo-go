@@ -11,6 +11,7 @@ func RegisterRoutes(
 	createCourseHandler *CreateCourseHandler,
 	getCourseHandler *GetCourseHandler,
 	deleteCourseHandler *DeleteCourseHandler,
+	updateCourseHandler *UpdateCourseHandler,
 ) {
 	// General
 	r.Get("/", web.IndexHandler)
@@ -21,5 +22,6 @@ func RegisterRoutes(
 		r.Post("/", createCourseHandler.Handle)
 		r.Get("/{id}", getCourseHandler.Handle)
 		r.Delete("/{id}", deleteCourseHandler.Handle)
+		r.Put("/{id}", updateCourseHandler.Handle)
 	})
 }

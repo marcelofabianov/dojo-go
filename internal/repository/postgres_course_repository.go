@@ -83,3 +83,32 @@ func (r *PostgresCourseRepository) DeleteCourseByID(ctx context.Context, id stri
 
 	return nil
 }
+
+func (r *PostgresCourseRepository) UpdateCourse(ctx context.Context, course *model.Course) error {
+	query := `
+		UPDATE courses
+		SET title = :title, description = :description
+		WHERE id = :id
+	`
+	result, err := r.db.NamedExecContext(ctx, query, course)
+	if err != nil {
+		return fault.Wrap(err,
+			"failed to update course in database",
+			fault.WithCode(fault.Internal),
+		)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fault.Wrap(err,
+			"failed to get rows affected after update",
+			fault.WithCode(fault.Internal),
+		)
+	}
+
+	if rowsAffected == 0 {
+		return model.ErrCourseNotFound
+	}
+
+	return nil
+}
