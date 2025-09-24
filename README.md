@@ -93,22 +93,28 @@ go test -tags="unit" ./...
 go test -tags="integration" ./...
 ```
 
-3. Executar todos os testes com detalhes
-
-```bash
-go test -v ./...
-```
-
-4. Executar testes e2e
+3. Executar testes e2e
 
 ```bash
 go test -tags="e2e" ./test/e2e/...
+```
+
+3. Executar todos os testes com detalhes verbose
+
+```bash
+go test -v ./...
 ```
 
 _Limpando cache_
 
 ```bash
 go clean -testcache
+```
+
+_Executar sem uso de cache acrescentar `-count=1`_
+
+```bash
+go test -count=1 -tags="e2e" ./test/e2e/...
 ```
 
 ---
