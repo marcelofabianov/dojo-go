@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -38,26 +39,35 @@ func NewRouter(cfg *config.ServerConfig, logger *slog.Logger) *chi.Mux {
 		httprate.WithResponseHeaders(headersRateLimit()),
 	))
 	r.Use(middleware.Heartbeat("/ping"))
-	r.Use(middleware.RequestSize(int64(cfg.API.MaxBodySize)))
-	r.Use(middleware.AllowContentType("application/json"))
 	r.Use(cors.Handler(setCorsOptions(cfg.CORS)))
-
-	// --- Conjunto de Headers de Segurança ---
-	r.Use(middleware.SetHeader("X-Content-Type-Options", "nosniff"))
-	r.Use(middleware.SetHeader("X-Frame-Options", "deny"))
-	r.Use(middleware.SetHeader("X-DNS-Prefetch-Control", "off"))
-	r.Use(middleware.SetHeader("X-Download-Options", "noopen"))
-	r.Use(middleware.SetHeader("Content-Security-Policy", "default-src 'none'"))
-	r.Use(middleware.SetHeader("Referrer-Policy", "no-referrer"))
-	r.Use(middleware.SetHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains"))
-	r.Use(middleware.SetHeader("Cache-Control", "no-store, no-cache"))
-
-	// --- Headers de Isolamento de Origem Cruzada ---
-	r.Use(middleware.SetHeader("Cross-Origin-Resource-Policy", "same-origin"))
-	r.Use(middleware.SetHeader("Cross-Origin-Opener-Policy", "same-origin"))
-	r.Use(middleware.SetHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()"))
+	r.Use(apiSecurityHeaders(cfg))
 
 	return r
+}
+
+func apiSecurityHeaders(cfg *config.ServerConfig) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if strings.HasPrefix(r.URL.Path, "/api") {
+				middleware.RequestSize(int64(cfg.API.MaxBodySize))(next).ServeHTTP(w, r)
+				middleware.AllowContentType("application/json")(next).ServeHTTP(w, r)
+
+				w.Header().Set("X-Content-Type-Options", "nosniff")
+				w.Header().Set("X-Frame-Options", "deny")
+				w.Header().Set("X-DNS-Prefetch-Control", "off")
+				w.Header().Set("X-Download-Options", "noopen")
+				w.Header().Set("Content-Security-Policy", "default-src 'none'")
+				w.Header().Set("Referrer-Policy", "no-referrer")
+				w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+				w.Header().Set("Cache-Control", "no-store, no-cache")
+				w.Header().Set("Cross-Origin-Resource-Policy", "same-origin")
+				w.Header().Set("Cross-Origin-Opener-Policy", "same-origin")
+				w.Header().Set("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+			}
+
+			next.ServeHTTP(w, r)
+		})
+	}
 }
 
 func headersRateLimit() httprate.ResponseHeaders {

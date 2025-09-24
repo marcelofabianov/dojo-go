@@ -130,6 +130,7 @@ go test -count=1 -tags="e2e" ./test/e2e/...
 * **Migrations:** [Goose](https://github.com/pressly/goose)
 * **Configuração:** [Viper](https://github.com/spf13/viper) & [Godotenv](https://github.com/joho/godotenv)
 * **Validação:** [go-playground/validator](https://github.com/go-playground/validator)
+* **Suite de Testes:** [testify/suite](https://github.com/stretchr/testify]
 
 ---
 

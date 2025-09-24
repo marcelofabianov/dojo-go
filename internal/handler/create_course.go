@@ -37,6 +37,19 @@ func NewCreateCourseHandler(
 	}
 }
 
+// NewCreateCourseHandler ...
+
+// Handle godoc
+// @Summary      Create a new course
+// @Description  Adds a new course to the database based on the provided data.
+// @Tags         Courses
+// @Accept       json
+// @Produce      json
+// @Param        course  body      CreateCourseRequest  true  "Course creation data"
+// @Success      201     {object}  CreateCourseResponse
+// @Failure      400     {object}  ErrorResponse "Validation errors"
+// @Failure      500     {object}  ErrorResponse "Internal server error"
+// @Router       /courses [post]
 func (h *CreateCourseHandler) Handle(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	logger := web.GetLogger(ctx)
