@@ -79,6 +79,34 @@ Consule o arquivo [API.md](API.md) para mais detalhes.
 
 ---
 
+## Testes
+
+1. Executar testes unitários
+
+```bash
+go test -tags="unit" ./...
+```
+
+2. Executar testes de integração
+
+```bash
+go test -tags="integration" ./...
+```
+
+3. Executar todos os testes com detalhes
+
+```bash
+go test -v ./...
+```
+
+4. Limpando cache
+
+```bash
+go clean -testcache
+```
+
+---
+
 ## Tecnologias Utilizadas
 
 * **Linguagem:** [Go](https://golang.org/)
