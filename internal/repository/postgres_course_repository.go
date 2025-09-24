@@ -2,6 +2,8 @@ package repository
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/marcelofabianov/fault"
@@ -33,4 +35,25 @@ func (r *PostgresCourseRepository) CreateCourse(ctx context.Context, course *mod
 	}
 
 	return nil
+}
+
+func (r *PostgresCourseRepository) GetCourseByID(ctx context.Context, id string) (*model.Course, error) {
+	query := `
+		SELECT id, title, description, created_at
+		FROM courses
+		WHERE id = $1
+	`
+
+	var course model.Course
+	if err := r.db.GetContext(ctx, &course, query, id); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, model.ErrCourseNotFound
+		}
+		return nil, fault.Wrap(err,
+			"failed to get course by id from database",
+			fault.WithCode(fault.Internal),
+		)
+	}
+
+	return &course, nil
 }

@@ -9,6 +9,7 @@ import (
 func RegisterRoutes(
 	r *chi.Mux,
 	createCourseHandler *CreateCourseHandler,
+	getCourseHandler *GetCourseHandler,
 ) {
 	// General routes
 	r.Get("/", web.IndexHandler)
@@ -17,5 +18,6 @@ func RegisterRoutes(
 	// Courses
 	r.Route("/api/v1/courses", func(r chi.Router) {
 		r.Post("/", createCourseHandler.Handle)
+		r.Get("/{id}", getCourseHandler.Handle)
 	})
 }

@@ -10,6 +10,7 @@ import (
 var (
 	ErrEmptyTitle       = errors.New("title cannot be empty")
 	ErrEmptyDescription = errors.New("description cannot be empty")
+	ErrCourseNotFound   = errors.New("course not found")
 )
 
 type NewCourseInput struct {

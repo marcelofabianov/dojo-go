@@ -58,6 +58,7 @@ var Service = fx.Module("service",
 var Handler = fx.Module("handler",
 	fx.Provide(
 		handler.NewCreateCourseHandler,
+		handler.NewGetCourseHandler,
 	),
 
 	fx.Invoke(handler.RegisterRoutes),

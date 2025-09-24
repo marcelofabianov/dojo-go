@@ -28,3 +28,7 @@ func (c *CourseService) CreateCourse(ctx context.Context, input model.NewCourseI
 
 	return newCourse, nil
 }
+
+func (c *CourseService) GetCourseByID(ctx context.Context, id string) (*model.Course, error) {
+	return c.repo.GetCourseByID(ctx, id)
+}
