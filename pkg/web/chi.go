@@ -46,26 +46,32 @@ func NewRouter(cfg *config.ServerConfig, logger *slog.Logger) *chi.Mux {
 }
 
 func apiSecurityHeaders(cfg *config.ServerConfig) func(http.Handler) http.Handler {
+	apiStack := func(next http.Handler) http.Handler {
+		return middleware.RequestSize(int64(cfg.API.MaxBodySize))(
+			middleware.AllowContentType("application/json")(next),
+		)
+	}
+
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if strings.HasPrefix(r.URL.Path, "/api") {
-				middleware.RequestSize(int64(cfg.API.MaxBodySize))(next).ServeHTTP(w, r)
-				middleware.AllowContentType("application/json")(next).ServeHTTP(w, r)
-
-				w.Header().Set("X-Content-Type-Options", "nosniff")
-				w.Header().Set("X-Frame-Options", "deny")
-				w.Header().Set("X-DNS-Prefetch-Control", "off")
-				w.Header().Set("X-Download-Options", "noopen")
-				w.Header().Set("Content-Security-Policy", "default-src 'none'")
-				w.Header().Set("Referrer-Policy", "no-referrer")
-				w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
-				w.Header().Set("Cache-Control", "no-store, no-cache")
-				w.Header().Set("Cross-Origin-Resource-Policy", "same-origin")
-				w.Header().Set("Cross-Origin-Opener-Policy", "same-origin")
-				w.Header().Set("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+			if !strings.HasPrefix(r.URL.Path, "/api") {
+				next.ServeHTTP(w, r)
+				return
 			}
 
-			next.ServeHTTP(w, r)
+			w.Header().Set("X-Content-Type-Options", "nosniff")
+			w.Header().Set("X-Frame-Options", "deny")
+			w.Header().Set("X-DNS-Prefetch-Control", "off")
+			w.Header().Set("X-Download-Options", "noopen")
+			w.Header().Set("Content-Security-Policy", "default-src 'none'")
+			w.Header().Set("Referrer-Policy", "no-referrer")
+			w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+			w.Header().Set("Cache-Control", "no-store, no-cache")
+			w.Header().Set("Cross-Origin-Resource-Policy", "same-origin")
+			w.Header().Set("Cross-Origin-Opener-Policy", "same-origin")
+			w.Header().Set("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+
+			apiStack(next).ServeHTTP(w, r)
 		})
 	}
 }
@@ -94,10 +100,9 @@ func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	}{
 		Status: "OK",
 	}
-
-	Success(w, r, 200, status)
+	Success(w, r, http.StatusOK, status)
 }
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	Success(w, r, 200, nil)
+	Success(w, r, http.StatusOK, nil)
 }
