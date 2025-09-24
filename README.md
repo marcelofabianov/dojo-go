@@ -99,7 +99,13 @@ go test -tags="integration" ./...
 go test -v ./...
 ```
 
-4. Limpando cache
+4. Executar testes e2e
+
+```bash
+go test -tags="e2e" ./test/e2e/...
+```
+
+_Limpando cache_
 
 ```bash
 go clean -testcache
