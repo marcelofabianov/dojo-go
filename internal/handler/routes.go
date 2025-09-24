@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/go-chi/chi/v5"
+	httpSwagger "github.com/swaggo/http-swagger"
 
 	"github.com/marcelofabianov/dojo-go/pkg/web"
 )
@@ -16,6 +17,11 @@ func RegisterRoutes(
 	// General
 	r.Get("/", web.IndexHandler)
 	r.Get("/healthz", web.HealthCheckHandler)
+
+	// Swagger
+	r.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("/swagger/doc.json"),
+	))
 
 	// Courses
 	r.Route("/api/v1/courses", func(r chi.Router) {

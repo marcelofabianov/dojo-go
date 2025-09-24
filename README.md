@@ -138,7 +138,7 @@ go test -count=1 -tags="e2e" ./test/e2e/...
 * **Configuração:** [Viper](https://github.com/spf13/viper) & [Godotenv](https://github.com/joho/godotenv)
 * **Validação:** [go-playground/validator](https://github.com/go-playground/validator)
 * **Documentação:** [Swagger](https://github.com/swaggo/swag)
-
+* **Suite de testes:** [testify](https://github.com/stretchr/testify)
 ---
 
 ## Licença

@@ -14,7 +14,8 @@ RUN apk add --no-cache bash curl git unzip && \
   go install github.com/pressly/goose/v3/cmd/goose@latest && \
   go install github.com/air-verse/air@latest && \
   go install github.com/securego/gosec/v2/cmd/gosec@latest && \
-  go install mvdan.cc/gofumpt@latest
+  go install mvdan.cc/gofumpt@latest && \
+  go install github.com/swaggo/swag/cmd/swag@latest
 
 ENV PATH=$PATH:/go/bin
 

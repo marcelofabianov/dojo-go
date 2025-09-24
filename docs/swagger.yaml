@@ -1,0 +1,100 @@
+basePath: /api/v1
+definitions:
+  handler.CreateCourseRequest:
+    properties:
+      description:
+        type: string
+      title:
+        type: string
+    required:
+    - description
+    - title
+    type: object
+  handler.CreateCourseResponse:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+    type: object
+  handler.ErrorContext:
+    properties:
+      field:
+        type: string
+      param:
+        type: string
+      tag:
+        type: string
+    type: object
+  handler.ErrorDetail:
+    properties:
+      code:
+        type: string
+      context:
+        $ref: '#/definitions/handler.ErrorContext'
+      message:
+        type: string
+    type: object
+  handler.ErrorResponse:
+    properties:
+      code:
+        example: invalid_input
+        type: string
+      details:
+        items:
+          $ref: '#/definitions/handler.ErrorDetail'
+        type: array
+      message:
+        example: Request validation failed
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: suporte@exemplo.com
+    name: Marcelo Fabiano
+    url: http://www.exemplo.com
+  description: API de exemplo para um Dojo de Go, demonstrando CRUD com arquitetura
+    limpa.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Dojo Go API
+  version: "1.0"
+paths:
+  /courses:
+    post:
+      consumes:
+      - application/json
+      description: Adds a new course to the database based on the provided data.
+      parameters:
+      - description: Course creation data
+        in: body
+        name: course
+        required: true
+        schema:
+          $ref: '#/definitions/handler.CreateCourseRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handler.CreateCourseResponse'
+        "400":
+          description: Validation errors
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Create a new course
+      tags:
+      - Courses
+swagger: "2.0"
