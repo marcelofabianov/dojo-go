@@ -97,6 +97,10 @@ Crie um novo registro de curso no banco de dados.
     }
     ```
 
+### Endpoints
+
+Consule o arquivo [API.md](API.md) para mais detalhes.
+
 ---
 
 ## 💻 Tecnologias Utilizadas

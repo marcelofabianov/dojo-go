@@ -1,0 +1,90 @@
+### Variáveis Globais
+# Define a URL base para todas as requisições.
+@baseUrl = http://localhost:8080
+@courseId = null
+
+############################################################
+### 1. Health Check
+#
+# Confirma se a API está online e respondendo.
+# Deverá retornar: 200 OK
+###
+GET {{baseUrl}}/healthz
+
+
+############################################################
+### 2. Criar um Novo Curso
+#
+# Cria um novo curso e salva o ID retornado em uma variável "courseId"
+# para ser usada nas requisições seguintes.
+# Deverá retornar: 201 Created
+###
+# @name createCourse
+### 2. Criar um Novo Curso
+# ...
+POST {{baseUrl}}/api/v1/courses
+Content-Type: application/json
+
+{
+    "title": "API Design with Go",
+    "description": "A complete guide to building robust APIs in Go."
+}
+
+> {%
+    const id = response.body.id;
+    client.log("ID extraído da resposta: " + id);
+    client.global.set("courseId", id);
+    client.log("Variável 'courseId' foi definida como: " + client.global.get("courseId"));
+%}
+
+
+############################################################
+### 3. Buscar Curso por ID (Sucesso)
+#
+# Utiliza a variável {{courseId}} capturada no passo anterior.
+# Deverá retornar: 200 OK
+###
+GET {{baseUrl}}/api/v1/courses/{{courseId}}
+
+
+############################################################
+### 4. Buscar Curso por ID (Não Encontrado)
+#
+# Testa o caso de um UUID válido, mas que não existe no banco.
+# Deverá retornar: 404 Not Found
+###
+GET {{baseUrl}}/api/v1/courses/f47ac10b-58cc-4372-a567-0e02b2c3d479
+
+
+############################################################
+### 5. Atualizar Curso
+#
+# Atualiza o curso criado anteriormente usando seu ID.
+# Deverá retornar: 200 OK
+###
+PUT {{baseUrl}}/api/v1/courses/{{courseId}}
+Content-Type: application/json
+
+{
+    "title": "Advanced API Design with Go and gRPC",
+    "description": "An updated and extended guide to building robust APIs in Go, now including gRPC."
+}
+
+
+############################################################
+### 6. Deletar Curso
+#
+# Deleta o curso criado anteriormente.
+# Deverá retornar: 204 No Content
+###
+DELETE {{baseUrl}}/api/v1/courses/{{courseId}}
+
+
+############################################################
+### 7. Verificar Deleção
+#
+# Tenta buscar o curso que acabamos de deletar para confirmar
+# que a operação foi bem-sucedida.
+# Deverá retornar: 404 Not Found
+###
+GET {{baseUrl}}/api/v1/courses/{{courseId}}
